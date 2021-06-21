@@ -5,7 +5,7 @@ I clone it from [Udacity account in Github](https://github.com/udacity/CppND-Pro
 And I extend the Concurrent Traffic Simulation with some tasks for it.
 Take a look at this picture and some tasks below:
 
-<img src="data/traffic_simulation.gif"/>
+<img src="data/traffic_simulation.png"/>
 
 ## Tasks Details 
 - **Task 1** : I defined a class `TrafficLight` which is a child class of `TrafficObject`. The class shall have the public methods `void waitForGreen()` and `void simulate()` as well as `TrafficLightPhase getCurrentPhase()`, where `TrafficLightPhase` is an enum that can be either `red` or `green`. Also, add the private method `void cycleThroughPhases()`. Furthermore, there shall be the private member `_currentPhase` which can take `red` or `green` as its value.
