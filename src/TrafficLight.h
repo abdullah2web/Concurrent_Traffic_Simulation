@@ -1,6 +1,7 @@
 #ifndef TRAFFICLIGHT_H
 #define TRAFFICLIGHT_H
 
+#include <string>
 #include <mutex>
 #include <deque>
 #include <condition_variable>
@@ -23,7 +24,7 @@ public:
     void send(T &&msg);
 
 private:
-    std::deque _queue;
+    std::deque<std::string> _queue;
     std::condition_variable _condition;
     std::mutex _mutex;
 };
