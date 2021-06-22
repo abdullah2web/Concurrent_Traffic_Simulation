@@ -1,6 +1,7 @@
 #include <iostream>
 #include <random>
 #include <mutex>
+#include <condition_variable>
 #include "TrafficLight.h"
 
 /* Implementation of class "MessageQueue" */
@@ -12,7 +13,7 @@ T MessageQueue<T>::receive()
     // to wait for and receive new messages and pull them from the queue using move semantics. 
     // The received object should then be returned by the receive function. 
     std::unique_lock<std::mutex> uLock(_mutex);
-    _condition.wait();
+    _condition.wait(std::unique_lock<std::mutex>&) std::unique_lock<std::mutex>&;
 
 }
 
@@ -40,14 +41,7 @@ void TrafficLight::waitForGreen()
     // FP.5b : add the implementation of the method waitForGreen, in which an infinite while-loop 
     // runs and repeatedly calls the receive function on the message queue. 
     // Once it receives TrafficLightPhase::green, the method returns.
-    void waitForGreen()
-    {
-        while (getCurrentPhase() == TrafficLightPhase::green)
-        {
-            return _queue;
-        }
-        
-    };
+    void waitForGreen() while (getCurrentPhase() == TrafficLightPhase::green){return _queue}
 }
 
 TrafficLightPhase TrafficLight::getCurrentPhase()
@@ -70,13 +64,5 @@ void TrafficLight::cycleThroughPhases()
     // and toggles the current phase of the traffic light between red and green and sends an update method 
     // to the message queue using move semantics. The cycle duration should be a random value between 4 and 6 seconds. 
     // Also, the while-loop should use std::this_thread::sleep_for to wait 1ms between two cycles. 
-    void TrafficLoop()
-    {
-        while (_currentPhase == red)
-        {
-            std::this_thread::sleep_for(std::chrono::milliseconds(1));
-        }
-    
-    };
-    
+    void TrafficLoop() while (_currentPhase == red){std::this_thread::sleep_for(std::chrono::milliseconds(1))};
 }
