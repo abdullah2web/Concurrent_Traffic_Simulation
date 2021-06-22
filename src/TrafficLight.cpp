@@ -1,5 +1,6 @@
 #include <iostream>
 #include <random>
+#include <mutex>
 #include "TrafficLight.h"
 
 /* Implementation of class "MessageQueue" */
@@ -11,7 +12,7 @@ T MessageQueue<T>::receive()
     // to wait for and receive new messages and pull them from the queue using move semantics. 
     // The received object should then be returned by the receive function. 
     std::unique_lock<std::mutex> uLock(_mutex);
-    _condition.wait(uLock, this {return !messages.empty();})
+    _condition.wait(uLock, this {return !messages.empty()});
 
 }
 
