@@ -13,8 +13,10 @@ T MessageQueue<T>::receive()
     // to wait for and receive new messages and pull them from the queue using move semantics. 
     // The received object should then be returned by the receive function. 
     std::unique_lock<std::mutex> uLock(_mutex);
-    //std::condition_variable;
-
+    _cond.wait(uLock, [this] { return !_messages.empty(); });
+    T msg = std::move(_messages.back());
+    _messages.pop_back();
+    return msg;
 }
 
 template <typename T>
@@ -22,14 +24,13 @@ void MessageQueue<T>::send(T &&msg)
 {
     // FP.4a : The method send should use the mechanisms std::lock_guard<std::mutex> 
     // as well as _condition.notify_one() to add a new message to the queue and afterwards send a notification.
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
     std::lock_guard<std::mutex> uLock(_mutex);
-    _condition.notify_one();
-    _queue.push_back(std::move(msg));
+    _messages.push_back(std::move(msg));
+    _cond.notify_one();
 }
 
-
 /* Implementation of class "TrafficLight" */
-
 
 TrafficLight::TrafficLight()
 {
@@ -42,11 +43,10 @@ void TrafficLight::waitForGreen()
     // runs and repeatedly calls the receive function on the message queue. 
     // Once it receives TrafficLightPhase::green, the method returns.
     void waitForGreen();
-    while (getCurrentPhase() == TrafficLightPhase::green)
+    while (true)
     {
-      return;
+        int message = queue->receive();
     }
-  
 }
 
 TrafficLightPhase TrafficLight::getCurrentPhase()
@@ -68,8 +68,15 @@ void TrafficLight::cycleThroughPhases()
     // FP.2a : Implement the function with an infinite loop that measures the time between two loop cycles 
     // and toggles the current phase of the traffic light between red and green and sends an update method 
     // to the message queue using move semantics. The cycle duration should be a random value between 4 and 6 seconds. 
-    // Also, the while-loop should use std::this_thread::sleep_for to wait 1ms between two cycles. 
-    void TrafficLoop();
+    // Also, the while-loop should use std::this_thread::sleep_for to wait 1ms between two cycles.
+    void pushBack(Vehicle &&v)
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::lock_guard<std::mutex> uLock(_mutex);
+        _vehicles.push_back(std::move(v));
+        _cond.notify_one();
+    }
+    
   	while (_currentPhase == red)
     {
       std::this_thread::sleep_for(std::chrono::milliseconds(1));
