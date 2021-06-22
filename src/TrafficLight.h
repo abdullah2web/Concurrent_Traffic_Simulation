@@ -24,7 +24,7 @@ public:
     void send(T &&msg);
 
 private:
-    std::deque<std::string> _queue;
+    std::deque<std::string> _messages;
     std::condition_variable _cond;
     std::mutex _mutex;
 };
