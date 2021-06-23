@@ -72,7 +72,7 @@ void TrafficLight::cycleThroughPhases()
     
     void pushBack(Vehicle &&v)
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        std::lock_guard<std::mutex> uLock(_mutex);
+        std::lock_guard<std::mutex> lck(_mutex);
         _vehicles.push_back(std::move(v));
         _cond.notify_one();
     
