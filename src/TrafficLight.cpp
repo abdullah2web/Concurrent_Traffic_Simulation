@@ -24,7 +24,6 @@ void MessageQueue<T>::send(T &&msg)
 {
     // FP.4a : The method send should use the mechanisms std::lock_guard<std::mutex> 
     // as well as _condition.notify_one() to add a new message to the queue and afterwards send a notification.
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
     std::lock_guard<std::mutex> uLock(_mutex);
     _messages.push_back(std::move(msg));
     _cond.notify_one();
@@ -45,9 +44,8 @@ void TrafficLight::waitForGreen()
     
     while (true)
     {
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
-        auto _currentPhase = _queue.receive();
-        while (_currentPhase == TrafficLightPhase::green) return;
+        auto curr_phase = msg_queue_->receive();
+        if (curr_phase == green) return;
     }
 }
 
@@ -66,15 +64,24 @@ void TrafficLight::cycleThroughPhases()
     // and toggles the current phase of the traffic light between red and green and sends an update method 
     // to the message queue using move semantics. The cycle duration should be a random value between 4 and 6 seconds. 
     // Also, the while-loop should use std::this_thread::sleep_for to wait 1ms between two cycles.
+
+    std::random_device rand;
+    std::mt19937 mt(rand());
+    std::uniform_real_distripution<float> cycleDuration(4000, 6000);
+    auto t1 = std::chrono::high_resolution_clock::now();
+    float time_cycle = cycleDuration(mt);
     
-    void pushBack(Vehicle &&v)
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    std::lock_guard<std::mutex> lck(_mutex);
-    _vehicles.push_back(std::move(v));
-    _cond.notify_one();
-    
-  	while (_currentPhase == red)
-    {
-      std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    while (true) {
+        auto t2 = std::chrono::high_resolution_clock::now();
+        def_t = t2 - t1;
+        if (def_t.count() > cycleDuration) {
+            t1 = std::chrono::high_resolution_clock::now();
+            time_cycle = cycleDuration(mt);
+            _currentPhase = (_currentPhase == TrafficLightPhase::green) ? red : green;
+            
+            TrafficLightPhase phase = _currentPhase;
+            msg_queue_.send(std::move(phase));
+        }
+        
     }
 }
