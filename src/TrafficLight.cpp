@@ -44,7 +44,7 @@ void TrafficLight::waitForGreen()
     
     while (true)
     {
-        auto curr_phase = msg_queue_->receive();
+        auto curr_phase = _queue.receive();
         if (curr_phase == green) return;
     }
 }
@@ -80,7 +80,7 @@ void TrafficLight::cycleThroughPhases()
             _currentPhase = (_currentPhase == TrafficLightPhase::green) ? red : green;
             
             TrafficLightPhase phase = _currentPhase;
-            msg_queue_->send(std::move(phase));
+            _queue.send(std::move(phase));
         }
         
     }
