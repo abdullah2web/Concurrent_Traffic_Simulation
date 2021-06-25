@@ -36,6 +36,11 @@ TrafficLight::TrafficLight()
     _currentPhase = TrafficLightPhase::red;
 }
 
+TrafficLight TrafficLightPhase::getCurrentPhase() const
+{
+    return getCurrentPhase();
+}
+
 void TrafficLight::waitForGreen()
 {
     // FP.5b : add the implementation of the method waitForGreen, in which an infinite while-loop 
