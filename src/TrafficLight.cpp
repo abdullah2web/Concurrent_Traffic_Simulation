@@ -36,7 +36,7 @@ TrafficLight::TrafficLight()
     _currentPhase = TrafficLightPhase::red;
 }
 
-TrafficLight TrafficLightPhase::getCurrentPhase() const
+TrafficLightPhase TrafficLight::getCurrentPhase()
 {
     return getCurrentPhase();
 }
