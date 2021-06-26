@@ -78,7 +78,7 @@ void TrafficLight::cycleThroughPhases()
     
     while (true) {
         auto t2 = std::chrono::high_resolution_clock::now();
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
       	auto stime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - t1).count();
         if (stime > time_cycle) {
             t1 = std::chrono::high_resolution_clock::now();
